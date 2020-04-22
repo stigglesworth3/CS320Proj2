@@ -45,20 +45,20 @@ void directMapped(string fileName, ofstream& outFile, int size)
 	outFile << hit  << "," << total;
 }
 
-const int toPass = 100;
+const int toPass = 64;
 
-int LRU(int sets, int way, int hit, int recent[][toPass])
+int LRU(int index, int way, int hit, int recent[][toPass])
 {
 	//if hit = -1, insert or replace
 	if (hit != -1)
 	{
-		int former = recent[sets][hit];
-		recent[sets][hit] = 0;
+		int former = recent[index][hit];
+		recent[index][hit] = 0;
 		for (int i=0; i<way; i++)
 		{
-			if (i != hit && recent[sets][i] < former)
+			if (i != hit && recent[index][i] < former)
 			{
-				(recent[sets][i])++;
+				(recent[index][i])++;
 			}
 		}
 		return -1;
@@ -68,11 +68,12 @@ int LRU(int sets, int way, int hit, int recent[][toPass])
 		int least;
 		for (int j=0; j<way; j++)
 		{
-			if (recent[sets][j] == -1)
+			if (recent[index][j] == -1)
 			{
+				recent[index][j] = 0;
 				return j;
 			}
-			if (recent[sets][j] == way-1)
+			if (recent[index][j] == way-1)
 			{
 				least = j;
 			}
@@ -81,11 +82,11 @@ int LRU(int sets, int way, int hit, int recent[][toPass])
 		{
 			if (k == least)
 			{
-				recent[sets][k] = 0;
+				recent[index][k] = 0;
 			}
 			else
 			{
-				(recent[sets][k])++;
+				(recent[index][k])++;
 			}
 		}
 		return least;
@@ -102,7 +103,7 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 	for (int i=0; i<sets; i++)
 	{
 		for (int j=0; j<way; j++)
-		{
+		{	
 			cache[i][j] = -1;
 			recent[i][j] = -1;
 		}
@@ -130,16 +131,22 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 			if (cache[index][k] == tag)
 			{
 				hit++;
-				LRUret = LRU(sets, way, k, recent);
+				LRUret = LRU(index, way, k, recent);
 				goodHit = 1;
 				break;
 			}
 		}
-		if (goodHit != 1)
+		if (goodHit == 0)
 		{
-			LRUret = LRU(sets, way, -1, recent);
-			cache[sets][LRUret] = tag;
+			LRUret = LRU(index, way, -1, recent);
+			cache[index][LRUret] = tag;
 		}
+
+		/*for (int z=0; z<way; z++)
+		{
+			cout << recent[index][z] << " ";
+		}
+		cout << endl;*/
 	}
 	outFile << hit << "," << total;
 }
