@@ -45,18 +45,18 @@ void directMapped(string fileName, ofstream& outFile, int size)
 	outFile << hit  << "," << total;
 }
 
-int LRU(int[][] recent, int set, int way, int hit)
+int LRU(int sets, int way, int hit, int recent)
 {
 	//if hit = -1, insert or replace
 	if (hit != -1)
 	{
-		former = recent[set][hit];
-		recent[set][hit] = 0;
+		int former = recent[sets][hit];
+		recent[sets][hit] = 0;
 		for (int i=0; i<way; i++)
 		{
-			if (i != hit && recent[set][i] < former)
+			if (i != hit && recent[sets][i] < former)
 			{
-				(recent[set][i])++;
+				(recent[sets][i])++;
 			}
 		}
 		return -1;
@@ -66,11 +66,11 @@ int LRU(int[][] recent, int set, int way, int hit)
 		int least;
 		for (int j=0; j<way; j++)
 		{
-			if (recent[set][j] == -1)
+			if (recent[sets][j] == -1)
 			{
 				return j;
 			}
-			if (recent[set][j] == way-1)
+			if (recent[sets][j] == way-1)
 			{
 				least = j;
 			}
@@ -79,11 +79,11 @@ int LRU(int[][] recent, int set, int way, int hit)
 		{
 			if (k == least)
 			{
-				recent[set][k] = 0;
+				recent[sets][k] = 0;
 			}
 			else
 			{
-				(recent[set][k])++;
+				(recent[sets][k])++;
 			}
 		}
 		return least;
@@ -94,10 +94,10 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 {
 	ifstream inFile(fileName);
 
-	int set = 512/way;
-	int cache[set][way];
-	int recent[set][way];
-	for (int i=0; i<set; i++)
+	int sets = 512/way;
+	int cache[sets][way];
+	int recent[sets][way];
+	for (int i=0; i<sets; i++)
 	{
 		for (int j=0; j<way; j++)
 		{
@@ -118,18 +118,28 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 		total++;
 
 		addr = addr>>5;
-		index = addr % set;
+		index = addr % sets;
 		tag = addr>>9;
+		int goodHit = 0;
+		int LRUret;
 
 		for (int k=0; k<way; k++)
 		{
 			if (cache[index][k] == tag)
 			{
 				hit++;
+				LRUret = LRU(sets, way, k, recent);
+				goodHit = 1;
 				break;
 			}
 		}
+		if (goodHit != 1)
+		{
+			LRUret = LRU(sets, way, -1, recent);
+			cache[sets][LRUret] = tag;
+		}
 	}
+	outFile << hit << "," << total;
 
 		
 }
@@ -148,5 +158,7 @@ int main(int argc, char *argv[])
 	outFile << "; ";
 	directMapped(fileName, outFile, 1024);
 	outFile << ";" << endl;
+
+	setAssociative(fileName, outFile, 2);
 	return 0;
 }
