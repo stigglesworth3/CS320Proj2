@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <math.h>
+#include <stdio.h>
 
 using namespace std;
 
@@ -19,13 +21,20 @@ void directMapped(string fileName, ofstream& outFile, int size)
 	int index;
 	string ldStr;
 	int addr;
+	int tag;
+	int logSize = log2(size);
+
 	while (inFile >> ldStr >> hex >> addr)
 	{
 		total++;
+
+		addr = addr>>5;
 		index = addr % size;
-		if (cache[index] != addr)
+		tag = addr>>logSize;
+		
+		if (cache[index] != tag)
 		{
-			cache[index] = addr;
+			cache[index] = tag;
 		}
 		else
 		{
@@ -43,5 +52,12 @@ int main(int argc, char *argv[])
 	outFile.open(argv[2]);
 
 	directMapped(fileName, outFile, 32);
+	outFile << "; ";
+	directMapped(fileName, outFile, 128);
+	outFile << "; ";
+	directMapped(fileName, outFile, 512);
+	outFile << "; ";
+	directMapped(fileName, outFile, 1024);
+	outFile << ";" << endl;
 	return 0;
 }
