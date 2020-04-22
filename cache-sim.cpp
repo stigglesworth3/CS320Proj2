@@ -128,58 +128,14 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 			if (cache[index][k] == tag)
 			{
 				hit++;
-				int former = recent[sets][hit];
-				recent[sets][hit] = 0;
-				for (int i=0; i<way; i++)
-				{
-					if (i != hit && recent[sets][i] < former && recent[sets][i] != -1)
-					{
-						(recent[sets][i])++;
-					}
-				}
+				LRU();
 				goodHit = 1;
 				break;
 			}
 		}
 		if (goodHit != 1)
 		{
-			int least;
-			int added = 0;
-			for (int j=0; j<way; j++)
-			{
-				if (recent[sets][j] == -1)
-				{
-					cache[sets][j] = tag;
-					recent[sets][j] = 0;
-					for (int w=0; w<way; w++)
-					{
-						if (w != j && recent[sets][w] != 0)
-						{
-							(recent[sets][w])++;
-						}
-					}
-					added = 1;
-					break;
-				}
-				if (recent[sets][j] == way-1)
-				{
-					least = j;
-				}
-			}
-			if (added == 0)
-			{
-				for (int k=0; k<way; k++)
-				{
-					if (k == least)
-					{
-						recent[sets][k] = 0;
-					}
-					else if (recent[sets][k] != -1)
-					{
-						(recent[sets][k])++;
-					}
-				}
-			}
+			LRU();
 			cache[sets][LRUret] = tag;
 		}
 	}
