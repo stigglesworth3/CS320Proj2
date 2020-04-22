@@ -45,7 +45,9 @@ void directMapped(string fileName, ofstream& outFile, int size)
 	outFile << hit  << "," << total;
 }
 
-int LRU(int sets, int way, int hit, int recent[][100])
+const int toPass = 100;
+
+int LRU(int sets, int way, int hit, int recent[][toPass])
 {
 	//if hit = -1, insert or replace
 	if (hit != -1)
@@ -96,7 +98,7 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 
 	int sets = 512/way;
 	int cache[sets][way];
-	int recent[sets][way];
+	int recent[sets][toPass];
 	for (int i=0; i<sets; i++)
 	{
 		for (int j=0; j<way; j++)
