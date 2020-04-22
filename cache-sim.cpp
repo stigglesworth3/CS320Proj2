@@ -45,7 +45,7 @@ void directMapped(string fileName, ofstream& outFile, int size)
 	outFile << hit  << "," << total;
 }
 
-/*int LRU(int sets, int way, int hit, int recent)
+int LRU(int sets, int way, int hit, int recent[][100])
 {
 	//if hit = -1, insert or replace
 	if (hit != -1)
@@ -88,7 +88,7 @@ void directMapped(string fileName, ofstream& outFile, int size)
 		}
 		return least;
 	}
-}*/
+}
 
 void setAssociative(string fileName, ofstream& outFile, int way)
 {
@@ -128,14 +128,14 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 			if (cache[index][k] == tag)
 			{
 				hit++;
-				LRU();
+				LRUret = LRU(sets, way, k, recent);
 				goodHit = 1;
 				break;
 			}
 		}
 		if (goodHit != 1)
 		{
-			LRU();
+			LRUret = LRU(sets, way, -1, recent);
 			cache[sets][LRUret] = tag;
 		}
 	}
