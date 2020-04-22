@@ -132,7 +132,7 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 				recent[sets][hit] = 0;
 				for (int i=0; i<way; i++)
 				{
-					if (i != hit && recent[sets][i] < former)
+					if (i != hit && recent[sets][i] < former && recent[sets][i] != -1)
 					{
 						(recent[sets][i])++;
 					}
@@ -144,34 +144,46 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 		if (goodHit != 1)
 		{
 			int least;
+			int added = 0;
 			for (int j=0; j<way; j++)
 			{
 				if (recent[sets][j] == -1)
 				{
-					return j;
+					cache[sets][j] = tag;
+					recent[sets][j] = 0;
+					for (int w=0; w<way; w++)
+					{
+						if (w != j && recent[sets][w] != 0)
+						{
+							(recent[sets][w])++;
+						}
+					}
+					added = 1;
+					break;
 				}
 				if (recent[sets][j] == way-1)
 				{
 					least = j;
 				}
 			}
-			for (int k=0; k<way; k++)
+			if (added == 0)
 			{
-				if (k == least)
+				for (int k=0; k<way; k++)
 				{
-					recent[sets][k] = 0;
-				}
-				else
-				{
-					(recent[sets][k])++;
+					if (k == least)
+					{
+						recent[sets][k] = 0;
+					}
+					else if (recent[sets][k] != -1)
+					{
+						(recent[sets][k])++;
+					}
 				}
 			}
 			cache[sets][LRUret] = tag;
 		}
 	}
 	outFile << hit << "," << total;
-
-		
 }
 
 int main(int argc, char *argv[])
