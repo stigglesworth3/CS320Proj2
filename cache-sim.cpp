@@ -50,6 +50,8 @@ const int toPass = 1024;
 
 int LRU(int index, int way, int hit, int recent[][toPass])
 {
+	int qwerty = 0;
+	qwerty++;
 	//if hit = -1, insert or replace
 	if (hit != -1)
 	{
