@@ -57,10 +57,9 @@ int LRU(int index, int way, int hit, int recent[][toPass])
 		recent[index][hit] = 0;
 		for (int i=0; i<way; i++)
 		{
-			if (i != hit && recent[index][i] < former)
+			if (i != hit && recent[index][i] < former && recent[index][i] != -1)
 			{
 				(recent[index][i])++;
-				//cout << recent[index][i] << ", " << former << endl;
 			}
 		}
 		return -1;
@@ -76,7 +75,6 @@ int LRU(int index, int way, int hit, int recent[][toPass])
 				for (int c=0; c<j; c++)
 				{
 					(recent[index][c])++;
-					//cout << recent[index][c] << endl;
 				}
 				return j;
 			}
@@ -84,21 +82,12 @@ int LRU(int index, int way, int hit, int recent[][toPass])
 			{
 				if (recent[index][j] == 0)
 				{
-					//cout << "*" << endl;
 				}
 				least = j;
 				break;
 			}
 		}
-		/*for (int e=0; e<way; e++)
-		{
-			cout << recent[index][e] << ", ";
-		}
-		cout << endl;*/
-		if (recent[index][least] == 0)
-		{
-			//cout << recent[index][0] << ", " << recent[index][1] << ", " << way << endl;
-		}
+		
 		for (int k=0; k<way; k++)
 		{
 			if (k == least)
@@ -107,11 +96,7 @@ int LRU(int index, int way, int hit, int recent[][toPass])
 			}
 			else
 			{
-				if (recent[index][k] != -1 /* recent[index][k] < way-1*/)
-				{
-					(recent[index][k])++;
-					//cout << recent[index][k] << endl;
-				}
+				(recent[index][k])++;
 			}
 		}
 		return least;
