@@ -45,7 +45,7 @@ void directMapped(string fileName, ofstream& outFile, int size)
 	outFile << hit  << "," << total;
 }
 
-const int toPass = 64;
+const int toPass = 1024;
 
 int LRU(int index, int way, int hit, int recent[][toPass])
 {
@@ -124,7 +124,7 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 		index = addr % sets;
 		tag = addr>>9;
 		int goodHit = 0;
-		int LRUret;
+		int LRUret = -1;
 
 		for (int k=0; k<way; k++)
 		{
@@ -167,5 +167,16 @@ int main(int argc, char *argv[])
 	outFile << ";" << endl;
 
 	setAssociative(fileName, outFile, 2);
+	outFile << "; ";
+	setAssociative(fileName, outFile, 4);
+	outFile << "; ";
+	setAssociative(fileName, outFile, 8);
+	outFile << "; ";
+	setAssociative(fileName, outFile, 16);
+	outFile << ";" << endl;
+
+	setAssociative(fileName, outFile, 512); //fully associative
+	outFile << ";" << endl;
+
 	return 0;
 }
