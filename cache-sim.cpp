@@ -54,14 +54,17 @@ int LRU(int index, int way, int hit, int recent[][toPass])
 	if (hit != -1)
 	{
 		int former = recent[index][hit];
-		recent[index][hit] = 0;
-		for (int i=0; i<way; i++)
+		if (former != 0)
 		{
-			if (i != hit && recent[index][i] < former && recent[index][i] != -1)
+			recent[index][hit] = 0;
+			for (int i=0; i<way; i++)
 			{
-				(recent[index][i])++;
+				if (i != hit && recent[index][i] < former && recent[index][i] != -1)
+				{
+					(recent[index][i])++;
+				}	
 			}
-		}
+		}	
 		return -1;
 	}
 	else
@@ -80,9 +83,6 @@ int LRU(int index, int way, int hit, int recent[][toPass])
 			}
 			if (recent[index][j] == way-1)
 			{
-				if (recent[index][j] == 0)
-				{
-				}
 				least = j;
 				break;
 			}
