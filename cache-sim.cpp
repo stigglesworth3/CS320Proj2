@@ -53,6 +53,10 @@ int LRU(int index, int way, int hit, int recent[][toPass])
 	if (hit != -1)
 	{
 		int former = recent[index][hit];
+		if (former > 1)
+		{
+			//cout << former << "\t" << hit << endl;
+		}
 		recent[index][hit] = 0;
 		for (int i=0; i<way; i++)
 		{
@@ -71,6 +75,10 @@ int LRU(int index, int way, int hit, int recent[][toPass])
 			if (recent[index][j] == -1)
 			{
 				recent[index][j] = 0;
+				for (int c=0; c<j; c++)
+				{
+					(recent[index][c])++;
+				}
 				return j;
 			}
 			if (recent[index][j] == way-1)
@@ -89,6 +97,12 @@ int LRU(int index, int way, int hit, int recent[][toPass])
 				(recent[index][k])++;
 			}
 		}
+		/*for (int a=0; a<=way; a++)
+		{
+			cout << recent[index][a] << " ";
+		}*/
+		//cout << endl;
+		//cout << least << "," << way << "," << recent[index][least] << endl;
 		return least;
 	}
 }
@@ -168,14 +182,14 @@ int main(int argc, char *argv[])
 
 	setAssociative(fileName, outFile, 2);
 	outFile << "; ";
-	setAssociative(fileName, outFile, 4);
+	//setAssociative(fileName, outFile, 4);
 	outFile << "; ";
-	setAssociative(fileName, outFile, 8);
+	//setAssociative(fileName, outFile, 8);
 	outFile << "; ";
-	setAssociative(fileName, outFile, 16);
+	//setAssociative(fileName, outFile, 16);
 	outFile << ";" << endl;
 
-	setAssociative(fileName, outFile, 512); //fully associative
+	//setAssociative(fileName, outFile, 512); //fully associative
 	outFile << ";" << endl;
 
 	return 0;
