@@ -3,6 +3,7 @@
 #include <string>
 #include <math.h>
 #include <stdio.h>
+#include <bitset>
 
 using namespace std;
 
@@ -53,23 +54,20 @@ int LRU(int index, int way, int hit, int recent[][toPass])
 	if (hit != -1)
 	{
 		int former = recent[index][hit];
-		if (former > 1)
-		{
-			//cout << former << "\t" << hit << endl;
-		}
 		recent[index][hit] = 0;
 		for (int i=0; i<way; i++)
 		{
 			if (i != hit && recent[index][i] < former)
 			{
 				(recent[index][i])++;
+				//cout << recent[index][i] << ", " << former << endl;
 			}
 		}
 		return -1;
 	}
 	else
 	{
-		int least;
+		int least = -1;
 		for (int j=0; j<way; j++)
 		{
 			if (recent[index][j] == -1)
@@ -78,13 +76,28 @@ int LRU(int index, int way, int hit, int recent[][toPass])
 				for (int c=0; c<j; c++)
 				{
 					(recent[index][c])++;
+					//cout << recent[index][c] << endl;
 				}
 				return j;
 			}
 			if (recent[index][j] == way-1)
 			{
+				if (recent[index][j] == 0)
+				{
+					//cout << "*" << endl;
+				}
 				least = j;
+				break;
 			}
+		}
+		/*for (int e=0; e<way; e++)
+		{
+			cout << recent[index][e] << ", ";
+		}
+		cout << endl;*/
+		if (recent[index][least] == 0)
+		{
+			//cout << recent[index][0] << ", " << recent[index][1] << ", " << way << endl;
 		}
 		for (int k=0; k<way; k++)
 		{
@@ -94,15 +107,13 @@ int LRU(int index, int way, int hit, int recent[][toPass])
 			}
 			else
 			{
-				(recent[index][k])++;
+				if (recent[index][k] != -1 /* recent[index][k] < way-1*/)
+				{
+					(recent[index][k])++;
+					//cout << recent[index][k] << endl;
+				}
 			}
 		}
-		/*for (int a=0; a<=way; a++)
-		{
-			cout << recent[index][a] << " ";
-		}*/
-		//cout << endl;
-		//cout << least << "," << way << "," << recent[index][least] << endl;
 		return least;
 	}
 }
@@ -144,6 +155,7 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 		{
 			if (cache[index][k] == tag)
 			{
+				//cout << bitset<16>(cache[index][k]) << ", " << bitset<16>(tag) << endl;
 				hit++;
 				LRUret = LRU(index, way, k, recent);
 				goodHit = 1;
