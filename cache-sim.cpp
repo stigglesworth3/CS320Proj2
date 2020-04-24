@@ -112,6 +112,7 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 	int sets = 512/way;
 	int cache[sets][way];
 	int recent[sets][toPass];
+	int logSize = log2(sets);
 	for (int i=0; i<sets; i++)
 	{
 		for (int j=0; j<way; j++)
@@ -134,7 +135,7 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 
 		addr = addr>>5;
 		index = addr % sets;
-		tag = addr>>9;
+		tag = addr>>logSize;
 		int goodHit = 0;
 		int LRUret = -1;
 
@@ -181,14 +182,14 @@ int main(int argc, char *argv[])
 
 	setAssociative(fileName, outFile, 2);
 	outFile << "; ";
-	//setAssociative(fileName, outFile, 4);
+	setAssociative(fileName, outFile, 4);
 	outFile << "; ";
-	//setAssociative(fileName, outFile, 8);
+	setAssociative(fileName, outFile, 8);
 	outFile << "; ";
-	//setAssociative(fileName, outFile, 16);
+	setAssociative(fileName, outFile, 16);
 	outFile << ";" << endl;
 
-	//setAssociative(fileName, outFile, 512); //fully associative
+	setAssociative(fileName, outFile, 512); //fully associative
 	outFile << ";" << endl;
 
 	return 0;
