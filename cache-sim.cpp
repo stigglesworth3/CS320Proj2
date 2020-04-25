@@ -189,8 +189,13 @@ int main(int argc, char *argv[])
 	setAssociative(fileName, outFile, 16);
 	outFile << ";" << endl;
 
-	setAssociative(fileName, outFile, 512); //fully associative
+	setAssociative(fileName, outFile, 512); //fully associative LRU
 	outFile << ";" << endl;
+	//fully with hot cold
+	outFile << ";" << endl;
+
+	setNoWriteMiss(fileName, outFile, 2);
+	outFile << "; ":
 
 	return 0;
 }
