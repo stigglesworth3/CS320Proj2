@@ -210,7 +210,7 @@ void setNoWriteMiss(string fileName, ofstream& outFile, int way)
 				break;
 			}
 		}
-		if (goodHit == 0)
+		if (goodHit == 0 && ldstr == "L")
 		{
 			LRUret = LRU(index, way, -1, recent);
 			cache[index][LRUret] = tag;
