@@ -256,7 +256,13 @@ int main(int argc, char *argv[])
 	outFile << ";" << endl;
 
 	setNoWriteMiss(fileName, outFile, 2);
-	outFile << "; ":
+	outFile << "; ";
+	setNoWriteMiss(fileName, outFile, 4);
+	outFile << "; ";
+	setNoWriteMiss(fileName, outFile, 8);
+	outFile << "; ";
+	setNoWriteMiss(fileName, outFile, 16);
+	outFile << ";" << endl;
 
 	return 0;
 }
