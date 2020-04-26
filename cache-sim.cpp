@@ -7,6 +7,8 @@
 
 using namespace std;
 
+//fix a mistake
+
 void directMapped(string fileName, ofstream& outFile, int size)
 {
 	ifstream inFile(fileName);
