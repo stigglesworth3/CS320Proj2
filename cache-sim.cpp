@@ -322,7 +322,61 @@ void setPrefetching(string fileName, ofstream& outFile, int way)
 
 void setPrefetchingMiss(string FileName, ofstream& outFile, int way)
 {
-	//
+	ifstream infile(filename);
+
+    int sets = 512 / way;
+    int cache[sets][way];
+    int recent[sets][MATRIX_COLUMN];
+    for (int i = 0; i < sets; i++) {
+        for (int j = 0; j < way; j++) { 
+            cache[i][j] = -1;
+            recent[i][j] = -1;
+        }
+    }
+
+    string str;
+    int hit = 0, total = 0;
+    int log_size = log2(sets);
+    int index, next_index, full_addr, addr, tag, next_tag;
+
+    while (infile >> str >> hex >> full_addr) {
+        addr = full_addr >> 5;
+        index = addr % sets;
+        tag = addr >> log_size;
+        int in_cache = 0;
+        int next_in_cache = 0;
+        int lru_ret = -1;
+
+        next_index = (addr + 1) % sets;
+        next_tag = (full_addr + 32) >> (log_size + 5);
+        for (int k = 0; k < way; k++) {
+            if (cache[index][k] == tag) {
+                hit++;
+                lru_ret = LRU(index, way, k, recent);
+                in_cache = 1;
+                break;
+            }
+        }
+        for (int k = 0; k < way; k++) {
+            if (cache[next_index][k] == next_tag) {
+                lru_ret = LRU(next_index, way, k, recent);
+                next_in_cache = 1;
+                break;
+            }
+        }
+        if (in_cache == 0) {
+            lru_ret = LRU(index, way, -1, recent);
+            cache[index][lru_ret] = tag;
+        }
+        if (next_in_cache == 0) {
+            lru_ret = LRU(next_index, way, -1, recent);
+            cache[next_index][lru_ret] = next_tag;
+        }
+
+        total++;
+    }
+
+    outfile << hit << "," << total;
 }
 
 
