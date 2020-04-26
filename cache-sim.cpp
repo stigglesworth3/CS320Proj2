@@ -156,30 +156,25 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 	outFile << hit << "," << total;
 }
 
-int findCold(int coldness[][toPass])
-{
-	int checkIndex = 0;
-	for (int h=0; h<9; h++)
-	{
-		if (coldness[h][checkIndex] == 0)
-		{
-			coldness[h][checkIndex] = 1;
-			checkIndex = (checkIndex*2)+1;
-		}
-		else
-		{
-			coldness[h][checkIndex] = 0;
-			checkIndex = checkIndex*2;
-		}
-	}
-	return checkIndex;
-}
-
 int hotCold(int index, int way, int hit, int coldness[][toPass])
 {
 	if (hit == -1)
 	{
-		return findCold(coldness);
+		int checkIndex = 0;
+		for (int h=0; h<9; h++)
+		{
+			if (coldness[h][checkIndex] == 0)
+			{
+				coldness[h][checkIndex] = 1;
+				checkIndex = (checkIndex*2)+1;
+			}
+			else
+			{
+				coldness[h][checkIndex] = 0;
+				checkIndex = checkIndex*2;
+			}
+		}
+		return checkIndex;
 	}
 	else
 	{
