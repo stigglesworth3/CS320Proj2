@@ -156,6 +156,10 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 	outFile << hit << "," << total;
 }
 
+int holtCold(int index, int way, int hit, int recent[][toPass], int coldness[][toPass])
+{
+}
+
 void fullyHotCold(string fileName, ofstream& outFile, int way)
 {
 	ifstream inFile(fileName);
@@ -163,6 +167,7 @@ void fullyHotCold(string fileName, ofstream& outFile, int way)
 	int sets = 512/way;
 	int cache[sets][way];
 	int recent[sets][toPass];
+	int coldness[sets][toPass];
 	int logSize = log2(sets);
 	for (int i=0; i<sets; i++)
 	{
@@ -170,6 +175,7 @@ void fullyHotCold(string fileName, ofstream& outFile, int way)
 		{	
 			cache[i][j] = -1;
 			recent[i][j] = -1;
+			coldness[i]j] = -1;
 		}
 	}
 
@@ -195,14 +201,14 @@ void fullyHotCold(string fileName, ofstream& outFile, int way)
 			if (cache[index][k] == tag)
 			{
 				hit++;
-				LRUret = fullyHotCold(index, way, k, recent);
+				LRUret = hotCold(index, way, k, recent, coldness);
 				goodHit = 1;
 				break;
 			}
 		}
 		if (goodHit == 0)
 		{
-			LRUret = fullyHotCold(index, way, -1, recent);
+			LRUret = hotCold(index, way, -1, recent, coldness);
 			cache[index][LRUret] = tag;
 		}
 	}
