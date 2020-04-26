@@ -273,6 +273,7 @@ void fullyHotCold(string fileName, ofstream& outFile, int way)
 }
 
 void setNoWriteMiss(string fileName, ofstream& outFile, int way)
+{
 	ifstream inFile(fileName);
 
 	int sets = 512/way;
