@@ -50,8 +50,6 @@ const int toPass = 1024;
 
 int LRU(int index, int way, int hit, int recent[][toPass])
 {
-	int qwerty = 0;
-	qwerty++;
 	//if hit = -1, insert or replace
 	if (hit != -1)
 	{
@@ -143,7 +141,6 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 		{
 			if (cache[index][k] == tag)
 			{
-				//cout << bitset<16>(cache[index][k]) << ", " << bitset<16>(tag) << endl;
 				hit++;
 				LRUret = LRU(index, way, k, recent);
 				goodHit = 1;
@@ -155,12 +152,6 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 			LRUret = LRU(index, way, -1, recent);
 			cache[index][LRUret] = tag;
 		}
-
-		/*for (int z=0; z<way; z++)
-		{
-			cout << recent[index][z] << " ";
-		}
-		cout << endl;*/
 	}
 	outFile << hit << "," << total;
 }
@@ -203,7 +194,6 @@ void setNoWriteMiss(string fileName, ofstream& outFile, int way)
 		{
 			if (cache[index][k] == tag)
 			{
-				//cout << bitset<16>(cache[index][k]) << ", " << bitset<16>(tag) << endl;
 				hit++;
 				LRUret = LRU(index, way, k, recent);
 				goodHit = 1;
@@ -215,12 +205,6 @@ void setNoWriteMiss(string fileName, ofstream& outFile, int way)
 			LRUret = LRU(index, way, -1, recent);
 			cache[index][LRUret] = tag;
 		}
-
-		/*for (int z=0; z<way; z++)
-		{
-			cout << recent[index][z] << " ";
-		}
-		cout << endl;*/
 	}
 	outFile << hit << "," << total;
 }
