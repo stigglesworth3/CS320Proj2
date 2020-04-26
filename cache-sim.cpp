@@ -156,7 +156,7 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 	outFile << hit << "," << total;
 }
 
-int hotCold(int index, int way, int hit, int coldness[][toPass])
+int hotCold(int hit, int coldness[][toPass])
 {
 	if (hit == -1)
 	{
@@ -248,14 +248,14 @@ void fullyHotCold(string fileName, ofstream& outFile, int way)
 			if (cache[index][k] == tag)
 			{
 				hit++;
-				LRUret = hotCold(index, way, k, coldness);
+				LRUret = hotCold(k, coldness);
 				goodHit = 1;
 				break;
 			}
 		}
 		if (goodHit == 0)
 		{
-			LRUret = hotCold(index, way, -1, coldness);
+			LRUret = hotCold(-1, coldness);
 			cache[index][LRUret] = tag;
 		}
 	}
@@ -315,6 +315,16 @@ void setNoWriteMiss(string fileName, ofstream& outFile, int way)
 	outFile << hit << "," << total;
 }
 
+void setPrefetching(string fileName, ofstream& outFile, int way)
+{
+	//
+}
+
+void setPrefetchingMiss(string FileName, ofstream& outFile, int way)
+{
+	//
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -353,6 +363,27 @@ int main(int argc, char *argv[])
 	outFile << "; ";
 	setNoWriteMiss(fileName, outFile, 16);
 	outFile << ";" << endl;
+
+	setPrefetching(fileName, outFile, 2);
+	outFile << "; ";
+	setPrefetching(fileName, outFile, 4);
+	outFile << "; ";
+	setPrefetching(fileName, outFile, 8);
+	outFile << "; ";
+	setPrefetching(fileName, outFile, 16);
+	outFile << ";" << endl;
+
+	setPrefetchingMiss(fileName, outFile, 2);
+	outFile << "; ";
+	setPrefetchingMiss(fileName, outFile, 4);
+	outFile << "; ";
+	setPrefetchingMiss(fileName, outFile, 8);
+	outFile << "; "; 
+	setPrefetchingMiss(fileName, outFile, 16);
+	outFile << ";" << endl;
+
+	outFile.close();
+
 
 	return 0;
 }
