@@ -156,6 +156,59 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 	outFile << hit << "," << total;
 }
 
+void fullyHotCold(string fileName, ofstream& outFile, int way)
+{
+	ifstream inFile(fileName);
+
+	int sets = 512/way;
+	int cache[sets][way];
+	int recent[sets][toPass];
+	int logSize = log2(sets);
+	for (int i=0; i<sets; i++)
+	{
+		for (int j=0; j<way; j++)
+		{	
+			cache[i][j] = -1;
+			recent[i][j] = -1;
+		}
+	}
+
+	int hit = 0;
+	int total = 0;
+	int index;
+	string ldstr;
+	int addr;
+	int tag;
+
+	while (inFile >> ldstr >> hex >> addr)
+	{
+		total++;
+
+		addr = addr>>5;
+		index = addr % sets;
+		tag = addr>>logSize;
+		int goodHit = 0;
+		int LRUret = -1;
+
+		for (int k=0; k<way; k++)
+		{
+			if (cache[index][k] == tag)
+			{
+				hit++;
+				LRUret = fullyHotCold(index, way, k, recent);
+				goodHit = 1;
+				break;
+			}
+		}
+		if (goodHit == 0)
+		{
+			LRUret = fullyHotCold(index, way, -1, recent);
+			cache[index][LRUret] = tag;
+		}
+	}
+	outFile << hit << "," << total;
+}
+
 void setNoWriteMiss(string fileName, ofstream& outFile, int way)
 {
 	ifstream inFile(fileName);
