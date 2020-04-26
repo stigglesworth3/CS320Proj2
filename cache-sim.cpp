@@ -7,8 +7,6 @@
 
 using namespace std;
 
-//fix a mistake
-
 void directMapped(string fileName, ofstream& outFile, int size)
 {
 	ifstream inFile(fileName);
@@ -158,19 +156,8 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 	outFile << hit << "," << total;
 }
 
-int hotCold(int index, int way, int hit, int coldness[][toPass], int cache[][toPass])
+int hotCold(int index, int way, int hit, int coldness[][toPass])
 {
-	/*if (hit == -1)
-	{
-		for(int f=0; f<way; f++)
-		{
-			if (cache[index][f] == -1)
-			{
-				hit = f;
-				break;
-			}
-		}
-	}*/
 	if (hit == -1)
 	{
 		int checkIndex = 0;
@@ -199,13 +186,17 @@ int hotCold(int index, int way, int hit, int coldness[][toPass], int cache[][toP
 			hit--;
 		}
 		hit /= 2;
-		for (int g=9; g<0; g--)
+		for (int g=8; g>=0; g--)
 		{
 			coldness[g][hit] = oneZero;
 			if (hit%2 == 1)
 			{
 				oneZero = 1;
 				hit--;
+			}
+			else
+			{
+				oneZero = 0;
 			}
 			hit /= 2;
 		}
@@ -258,14 +249,14 @@ void fullyHotCold(string fileName, ofstream& outFile, int way)
 			if (cache[index][k] == tag)
 			{
 				hit++;
-				LRUret = hotCold(index, way, k, coldness, cache);
+				LRUret = hotCold(index, way, k, coldness);
 				goodHit = 1;
 				break;
 			}
 		}
 		if (goodHit == 0)
 		{
-			LRUret = hotCold(index, way, -1, coldness, cache);
+			LRUret = hotCold(index, way, -1, coldness);
 			cache[index][LRUret] = tag;
 		}
 	}
