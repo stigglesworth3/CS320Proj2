@@ -156,8 +156,19 @@ void setAssociative(string fileName, ofstream& outFile, int way)
 	outFile << hit << "," << total;
 }
 
-int hotCold(int index, int way, int hit, int coldness[][toPass])
+int hotCold(int index, int way, int hit, int coldness[][toPass], int cache[][toPass])
 {
+	/*if (hit == -1)
+	{
+		for(int f=0; f<way; f++)
+		{
+			if (cache[index][f] == -1)
+			{
+				hit = f;
+				break;
+			}
+		}
+	}*/
 	if (hit == -1)
 	{
 		int checkIndex = 0;
@@ -179,13 +190,14 @@ int hotCold(int index, int way, int hit, int coldness[][toPass])
 	else
 	{
 		int oneZero = 0;
+		int ret = hit;
 		if (hit%2 == 1)
 		{
 			oneZero = 1;
 			hit--;
 		}
 		hit /= 2;
-		for (int g=0; g<9; g++)
+		for (int g=9; g<0; g--)
 		{
 			coldness[g][hit] = oneZero;
 			if (hit%2 == 1)
@@ -195,7 +207,7 @@ int hotCold(int index, int way, int hit, int coldness[][toPass])
 			}
 			hit /= 2;
 		}
-		return -1;
+		return ret;
 	}
 }
 
@@ -204,7 +216,7 @@ void fullyHotCold(string fileName, ofstream& outFile, int way)
 	ifstream inFile(fileName);
 
 	int sets = 512/way;
-	int cache[sets][way];
+	int cache[sets][toPass];
 	int coldness[9][toPass];
 	int logSize = log2(sets);
 	for (int i=0; i<sets; i++)
@@ -244,14 +256,14 @@ void fullyHotCold(string fileName, ofstream& outFile, int way)
 			if (cache[index][k] == tag)
 			{
 				hit++;
-				LRUret = hotCold(index, way, k, coldness);
+				LRUret = hotCold(index, way, k, coldness, cache);
 				goodHit = 1;
 				break;
 			}
 		}
 		if (goodHit == 0)
 		{
-			LRUret = hotCold(index, way, -1, coldness);
+			LRUret = hotCold(index, way, -1, coldness, cache);
 			cache[index][LRUret] = tag;
 		}
 	}
@@ -259,7 +271,6 @@ void fullyHotCold(string fileName, ofstream& outFile, int way)
 }
 
 void setNoWriteMiss(string fileName, ofstream& outFile, int way)
-{
 	ifstream inFile(fileName);
 
 	int sets = 512/way;
