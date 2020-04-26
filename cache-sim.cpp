@@ -317,11 +317,11 @@ void setNoWriteMiss(string fileName, ofstream& outFile, int way)
 
 void setPrefetching(string fileName, ofstream& outFile, int way)
 {
-	ifstream infile(filename);
+	ifstream inFile(fileName);
 
     int sets = 512 / way;
     int cache[sets][way];
-    int recent[sets][MATRIX_COLUMN];
+    int recent[sets][toPass];
     for (int i = 0; i < sets; i++) {
         for (int j = 0; j < way; j++) { 
             cache[i][j] = -1;
@@ -334,7 +334,7 @@ void setPrefetching(string fileName, ofstream& outFile, int way)
     int log_size = log2(sets);
     int index, next_index, full_addr, addr, tag, next_tag;
 
-    while (infile >> str >> hex >> full_addr) {
+    while (inFile >> str >> hex >> full_addr) {
         addr = full_addr >> 5;
         index = addr % sets;
         tag = addr >> log_size;
@@ -371,16 +371,16 @@ void setPrefetching(string fileName, ofstream& outFile, int way)
         total++;
     }
 
-    outfile << hit << "," << total;
+    outFile << hit << "," << total;
 }
 
-void setPrefetchingMiss(string FileName, ofstream& outFile, int way)
+void setPrefetchingMiss(string fileName, ofstream& outFile, int way)
 {
-	ifstream infile(filename);
+	ifstream inFile(fileName);
 
     int sets = 512 / way;
     int cache[sets][way];
-    int recent[sets][MATRIX_COLUMN];
+    int recent[sets][toPass];
     for (int i = 0; i < sets; i++) {
         for (int j = 0; j < way; j++) { 
             cache[i][j] = -1;
@@ -393,7 +393,7 @@ void setPrefetchingMiss(string FileName, ofstream& outFile, int way)
     int log_size = log2(sets);
     int index, next_index, full_addr, addr, tag, next_tag;
 
-    while (infile >> str >> hex >> full_addr) {
+    while (inFile >> str >> hex >> full_addr) {
         addr = full_addr >> 5;
         index = addr % sets;
         tag = addr >> log_size;
@@ -432,7 +432,7 @@ void setPrefetchingMiss(string FileName, ofstream& outFile, int way)
         total++;
     }
 
-    outfile << hit << "," << total;
+    outFile << hit << "," << total;
 }
 
 
