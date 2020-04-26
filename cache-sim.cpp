@@ -178,15 +178,24 @@ int hotCold(int index, int way, int hit, int coldness[][toPass])
 	}
 	else
 	{
+		int oneZero = 0;
 		if (hit%2 == 1)
 		{
+			oneZero = 1;
 			hit--;
 		}
 		hit /= 2;
 		for (int g=0; g<9; g++)
 		{
-
+			coldness[g][hit] = oneZero;
+			if (hit%2 == 1)
+			{
+				oneZero = 1;
+				hit--;
+			}
+			hit /= 2;
 		}
+		return -1;
 	}
 }
 
@@ -205,9 +214,9 @@ void fullyHotCold(string fileName, ofstream& outFile, int way)
 			cache[i][j] = -1;
 		}
 	}
-	for (int a=0; a<9)
+	for (int a=0; a<9; a++)
 	{
-		for (int b=256; b++)
+		for (int b=0; b<256; b++)
 		{
 			coldness[a][b] = 0;
 		}
@@ -235,14 +244,14 @@ void fullyHotCold(string fileName, ofstream& outFile, int way)
 			if (cache[index][k] == tag)
 			{
 				hit++;
-				LRUret = hotCold(index, way, k, recent, coldness);
+				LRUret = hotCold(index, way, k, coldness);
 				goodHit = 1;
 				break;
 			}
 		}
 		if (goodHit == 0)
 		{
-			LRUret = hotCold(index, way, -1, recent, coldness);
+			LRUret = hotCold(index, way, -1, coldness);
 			cache[index][LRUret] = tag;
 		}
 	}
@@ -329,7 +338,7 @@ int main(int argc, char *argv[])
 
 	setAssociative(fileName, outFile, 512); //fully associative LRU
 	outFile << ";" << endl;
-	//fully with hot cold
+	fullyHotCold(fileName, outFile, 512);
 	outFile << ";" << endl;
 
 	setNoWriteMiss(fileName, outFile, 2);
