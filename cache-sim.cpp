@@ -179,7 +179,6 @@ int hotCold(int index, int way, int hit, int coldness[][toPass])
 	else
 	{
 		int oneZero = 0;
-		int ret = hit;
 		if (hit%2 == 1)
 		{
 			oneZero = 1;
@@ -200,7 +199,7 @@ int hotCold(int index, int way, int hit, int coldness[][toPass])
 			}
 			hit /= 2;
 		}
-		return ret;
+		return -1;
 	}
 }
 
